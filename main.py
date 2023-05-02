@@ -32,7 +32,7 @@ def main():
 
     # Start polling
     try:
-        updater.start_polling()
+        updater.start_polling(timeout=60)
         logging.info('Started')
         updater.idle()
     except Exception as e:
