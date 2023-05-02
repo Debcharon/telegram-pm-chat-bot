@@ -58,7 +58,6 @@ def init_user(user):
     Initialize user profile if this is the first time the user is using the bot.
     Update user nickname if it has changed.
     """
-    global preference_list
     if str(user.id) not in preference_list:
         preference_list[str(user.id)] = {}
         preference_list[str(user.id)]['notification'] = False
