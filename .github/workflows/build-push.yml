@@ -2,9 +2,9 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "dev" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "dev" ]
+    branches: [ "main" ]
 
 jobs:
 
@@ -44,25 +44,3 @@ jobs:
       run: |
         docker manifest create microcharon/telegram-pm-chat-bot:latest microcharon/telegram-pm-chat-bot:latest-amd64 microcharon/telegram-pm-chat-bot:latest-arm64 --amend
         docker manifest push microcharon/telegram-pm-chat-bot:latest
-
-    - name: Login to GitHub Container Registry
-      uses: docker/login-action@v3
-      with:
-        registry: ghcr.io
-        username: ${{ github.actor }}
-        password: ${{ secrets.GHCR_TOKEN }}
-
-    - name: Build and push AMD64 image to GitHub Container Registry
-      run: |
-        docker buildx build --load --platform linux/amd64 -t ghcr.io/debcharon/telegram-pm-chat-bot:latest-amd64 .
-        docker push ghcr.io/debcharon/telegram-pm-chat-bot:latest-amd64
-
-    - name: Build and push ARM64 image to GitHub Container Registry
-      run: |
-        docker buildx build --load --platform linux/arm64 -t ghcr.io/debcharon/telegram-pm-chat-bot:latest-arm64 .
-        docker push ghcr.io/debcharon/telegram-pm-chat-bot:latest-arm64
-
-    - name: Create and push manifest to GitHub Container Registry
-      run: |
-        docker manifest create ghcr.io/debcharon/telegram-pm-chat-bot:latest ghcr.io/debcharon/telegram-pm-chat-bot:latest-amd64 ghcr.io/microcharon/telegram-pm-chat-bot:latest-arm64 --amend
-        docker manifest push ghcr.io/debcharon/telegram-pm-chat-bot:latest
