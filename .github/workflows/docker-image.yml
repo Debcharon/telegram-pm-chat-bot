@@ -30,17 +30,39 @@ jobs:
         username: ${{ secrets.DOCKERHUB_USERNAME }}
         password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-    - name: Build and push AMD64 image
+    - name: Build and push AMD64 image to Docker Hub
       run: |
         docker buildx build --load --platform linux/amd64 -t microcharon/telegram-pm-chat-bot:latest-amd64 .
         docker push microcharon/telegram-pm-chat-bot:latest-amd64
 
-    - name: Build and push ARM64 image
+    - name: Build and push ARM64 image to Docker Hub
       run: |
         docker buildx build --load --platform linux/arm64 -t microcharon/telegram-pm-chat-bot:latest-arm64 .
         docker push microcharon/telegram-pm-chat-bot:latest-arm64
 
-    - name: Create and push manifest
+    - name: Create and push manifest to Docker Hub
       run: |
         docker manifest create microcharon/telegram-pm-chat-bot:latest microcharon/telegram-pm-chat-bot:latest-amd64 microcharon/telegram-pm-chat-bot:latest-arm64 --amend
         docker manifest push microcharon/telegram-pm-chat-bot:latest
+
+    - name: Login to GitHub Container Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build and push AMD64 image to GitHub Container Registry
+      run: |
+        docker buildx build --load --platform linux/amd64 -t ghcr.io/microcharon/telegram-pm-chat-bot:latest-amd64 .
+        docker push ghcr.io/microcharon/telegram-pm-chat-bot:latest-amd64
+
+    - name: Build and push ARM64 image to GitHub Container Registry
+      run: |
+        docker buildx build --load --platform linux/arm64 -t ghcr.io/microcharon/telegram-pm-chat-bot:latest-arm64 .
+        docker push ghcr.io/microcharon/telegram-pm-chat-bot:latest-arm64
+
+    - name: Create and push manifest to GitHub Container Registry
+      run: |
+        docker manifest create ghcr.io/microcharon/telegram-pm-chat-bot:latest ghcr.io/microcharon/telegram-pm-chat-bot:latest-amd64 ghcr.io/microcharon/telegram-pm-chat-bot:latest-arm64 --amend
+        docker manifest push ghcr.io/microcharon/telegram-pm-chat-bot:latest
