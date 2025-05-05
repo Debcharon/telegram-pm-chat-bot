@@ -9,7 +9,8 @@ WORKDIR /app
 COPY . /app
 
 # Install dependencies required for the project
-RUN pip install -r requirements.txt
+RUN pip install python-imghdr && \
+    pip install -r requirements.txt
 
 # Reserve
 # EXPOSE 8000
