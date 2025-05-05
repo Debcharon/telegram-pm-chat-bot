@@ -9,7 +9,7 @@ WORKDIR /app
 COPY . /app
 
 # Install dependencies required for the project
-RUN pip install python-imghdr && \
+RUN pip install standard-imghdr && \
     pip install -r requirements.txt
 
 # Reserve
